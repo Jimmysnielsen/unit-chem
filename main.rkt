@@ -1,7 +1,10 @@
 #lang racket/base
 
 (module+ test
-  (require rackunit))
+  (require rackunit
+           "./private/equation-solver/newton-solver.rkt"))
+
+(provide (all-from-out))
 
 ;; Notice
 ;; To install (from within the package directory):
@@ -25,6 +28,9 @@
 
 ;; Code here
 
+(module+ test
+  (check-= (newton-solver (lambda (x) (+ 2 x))) -2. 1e-6 "failed linear function f(x)=2+x"))
+
 
 
 (module+ test
@@ -39,12 +45,13 @@
   ;; this file is run using DrRacket or the `racket` executable.  The code here
   ;; does not run when this file is required by another module. Documentation:
   ;; http://docs.racket-lang.org/guide/Module_Syntax.html#%28part._main-and-test%29
+  (newton-solver (lambda (x) (+ 2 x)))
 
   (require racket/cmdline)
   (define who (box "world"))
   (command-line
-    #:program "my-program"
-    #:once-each
-    [("-n" "--name") name "Who to say hello to" (set-box! who name)]
-    #:args ()
-    (printf "hello ~a~n" (unbox who))))
+   #:program "my-program"
+   #:once-each
+   [("-n" "--name") name "Who to say hello to" (set-box! who name)]
+   #:args ()
+   (printf "hello ~a~n" (unbox who))))
